@@ -9,16 +9,23 @@ const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
 
+
+ var cookieParser = require('cookie-parser');
+ app.use(cookieParser());
+
+
 // connectivity with database
 mongoose.connect('mongodb://localhost:27017/user', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 // set up body parser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 
 app.use(cookieSession({
-    maxAge: 24 *60 *60 *1000,
-    keys : [keys.session.cookieKey]
+    maxAge: 10 * 1000,
+    keys: [keys.session.cookieKey]
 }));
 
 //initialize passport
@@ -27,23 +34,20 @@ app.use(passport.session());
 
 
 // set up view engine
-app.set('view engine','ejs');
+app.set('view engine', 'ejs');
 
 
 //set up routes
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParser.json());
-
-app.use('/auth',authRoutes);
-app.use('/profile',profileRoutes);
+app.use('/auth', authRoutes);
+app.use('/profile', profileRoutes);
 
 
 // create home routes
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
     res.render("home");
 });
 
 
-app.listen(3002,()=>{
+app.listen(3002, () => {
     console.log('app now listening for requests on port 3002');
 })
