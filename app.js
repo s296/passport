@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 
 
 app.use(cookieSession({
-    maxAge: 10 * 1000,
+    maxAge: 60 * 1000,
     keys: [keys.session.cookieKey]
 }));
 
@@ -44,7 +44,7 @@ app.use('/profile', profileRoutes);
 
 // create home routes
 app.get('/', (req, res) => {
-    res.render("home");
+    res.render("home",{user:req.user});
 });
 
 
